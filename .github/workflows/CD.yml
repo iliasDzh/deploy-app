@@ -35,3 +35,9 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Deploy
+      run: |
+        helm upgrade --install my-release ./hello --set repository.image=kaizenacademy/python-app1 --set repository.tag=2.0.0
+
+        helm install my-release ./hello
