@@ -1,9 +1,9 @@
 name: Deploy to GKE
 
-
 on:
   # push:
   #   branches: ["main"]
+
   workflow_dispatch:
     inputs:
       docker_image:
@@ -11,10 +11,10 @@ on:
         required: true
         default: ''
       image_tag:
-      docker_image:
         description: 'Provide image tag'
         required: true
         default: ''
+
 jobs:
   setup-build-publish:
     name: Setup, Build, and Publish
@@ -33,13 +33,13 @@ jobs:
         credentials_json: ${{ secrets.GKE_SA_KEY }}
 
     - name: Set GCP Project
-      run: gcloud config set project round-booking-424123-j9
+      run: gcloud config set project horizontal-tube-424123-a0
 
     - name: Install gke-gcloud-auth-plugin
       run: gcloud components install gke-gcloud-auth-plugin
 
     - name: Get GKE credentials
-      run: gcloud container clusters get-credentials cluster-1 --zone us-central1-c 
+      run: gcloud container clusters get-credentials cluster-1 --zone us-central1-c
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
@@ -49,6 +49,4 @@ jobs:
 
     - name: Deploy
       run: |
-        helm upgrade --install my-release ./hello --set repository.image=${{ inputs.docker_image }} --set repository.tag={{ inputs.image_tag }}
-
-        
+        helm upgrade --install my-release ./hello --set repository.image=${{ inputs.docker_image }} --set repository.tag=${{ inputs.image_tag }}
